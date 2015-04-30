@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 
 public class MainActivity extends FragmentActivity implements ProductsFragment.OnFragmentInteractionListener{
-
+    public static FragmentManager fragmentManager;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -43,6 +43,8 @@ public class MainActivity extends FragmentActivity implements ProductsFragment.O
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        fragmentManager = getSupportFragmentManager();
 
     }
 
@@ -104,7 +106,7 @@ public class MainActivity extends FragmentActivity implements ProductsFragment.O
                     fragment = new HomeFragment();
                     return fragment;
                 case 1:
-                    fragment = new HomeFragment();
+                    fragment = new MapsFragment();
                     //implement maps fragment https://developers.google.com/maps/documentation/android/start#install_the_android_sdk
                     return fragment;
                 case 2:
