@@ -6,11 +6,10 @@
     <string name="title_section3">Section 3</string>
     <string name="title_section4">Section 4</string>
 
-    <string name="hello_world">Hello world!</string>
 
     <string name="action_settings">Settings</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps_fragment">Map</string>
+    <string name="qr_fragment_scan_button">Scan</string>
 </resources>

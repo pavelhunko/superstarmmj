@@ -13,21 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class MainActivity extends FragmentActivity implements ProductsFragment.OnFragmentInteractionListener{
+public class MainActivity extends FragmentActivity {
     public static FragmentManager fragmentManager;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+
     SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+
     ViewPager mViewPager;
 
     @Override
@@ -45,11 +36,6 @@ public class MainActivity extends FragmentActivity implements ProductsFragment.O
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         fragmentManager = getSupportFragmentManager();
-
-    }
-
-    @Override
-    public void onFragmentInteraction(String id) {
 
     }
 
@@ -86,10 +72,7 @@ public class MainActivity extends FragmentActivity implements ProductsFragment.O
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -106,14 +89,17 @@ public class MainActivity extends FragmentActivity implements ProductsFragment.O
                     fragment = new HomeFragment();
                     return fragment;
                 case 1:
-                    fragment = new MapsFragment();
+                    fragment = new HomeFragment();
+                    //fragment = new MapsFragment();
                     //implement maps fragment https://developers.google.com/maps/documentation/android/start#install_the_android_sdk
                     return fragment;
                 case 2:
-                    fragment = new ProductsFragment();
+                    //fragment = new ProductsFragment();
+                    fragment = new HomeFragment();
                     return fragment;
                 case 3:
-                    fragment = new ProductsFragment();
+                    //fragment = new ProductsFragment();
+                    fragment = new HomeFragment();
                     return fragment;
             }
 
