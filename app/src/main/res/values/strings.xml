@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Superstar MMJ Dispensaries</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="title_section4">Section 4</string>
+    <string name="home_tab">Home</string>
+    <string name="location_tab">Location</string>
+    <string name="products_tab">Products</string>
+    <string name="qr_tab">QR</string>
 
 
     <string name="action_settings">Settings</string>

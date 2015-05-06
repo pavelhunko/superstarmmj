@@ -28,7 +28,7 @@ public class QRFragment extends Fragment implements IScanResultHandler{
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_qr, container, false);
 
-        barcodeFragment = (BarcodeFragment) MainActivity.fragmentManager.findFragmentById(R.layout.fragment_qr);
+       // barcodeFragment = (BarcodeFragment) MainActivity.fragmentManager.findFragmentById(R.layout.fragment_qr);
         barcodeFragment.setScanResultHandler(this);
 
         btn.setEnabled(false);
