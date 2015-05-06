@@ -34,6 +34,7 @@ public class MapsFragment extends Fragment {
         latitude = 26.78;
         longitude = 72.56;
         fManager = MainActivity.fragmentManager;
+
         setUpMapIfNeeded(); // For setting up the MapFragment
 
         return view;
@@ -44,8 +45,9 @@ public class MapsFragment extends Fragment {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) fManager.findFragmentById(R.id.location_map))
-                    .getMap();
+            SupportMapFragment mySupportMapFragment = (SupportMapFragment) fManager.findFragmentById(R.id.map);
+
+            mMap = mySupportMapFragment.getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
