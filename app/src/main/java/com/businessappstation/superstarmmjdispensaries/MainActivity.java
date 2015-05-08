@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class MainActivity extends FragmentActivity {
-    final ActionBar actionBar = getActionBar();
+    //final ActionBar actionBar = getActionBar();
     //private List<SamplePagerItem>
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity {
                     return fragment;
                 case 3:
                     //fragment = new ProductsFragment();
-                    fragment = new HomeFragment();
+                    fragment = new QRFragment();
                     return fragment;
                 default:
                     return null;
@@ -82,6 +82,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             //Locale l = Locale.getDefault();
+            //https://github.com/astuetz/PagerSlidingTabStrip
             switch (position) {
                 case 0:
                     //title image

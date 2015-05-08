@@ -6,21 +6,24 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/hometopmap"
-        android:contentDescription="splashscreen"
-        android:scaleType="center" />
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/hometopmap" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/imageView2"
-        android:src="@drawable/homeback"
-        android:scaleType="centerInside"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/homeback" />
+
+
 </LinearLayout>
 
 
