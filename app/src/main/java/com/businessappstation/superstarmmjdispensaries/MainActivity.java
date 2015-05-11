@@ -1,6 +1,5 @@
 package com.businessappstation.superstarmmjdispensaries;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import java.util.List;
 
 
 public class MainActivity extends FragmentActivity {
@@ -17,14 +15,16 @@ public class MainActivity extends FragmentActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -58,11 +58,11 @@ public class MainActivity extends FragmentActivity {
                     //implement maps fragment https://developers.google.com/maps/documentation/android/start#install_the_android_sdk
                     return fragment;
                 case 2:
-                    //fragment = new ProductsFragment();
-                    fragment = new HomeFragment();
+                    fragment = new ProductsFragment();
+                    //fragment = new HomeFragment();
                     return fragment;
                 case 3:
-                    //fragment = new ProductsFragment();
+                   // fragment = new HomeFragment();
                     fragment = new QRFragment();
                     return fragment;
                 default:

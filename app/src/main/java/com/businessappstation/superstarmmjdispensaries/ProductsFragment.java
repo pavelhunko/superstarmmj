@@ -1,72 +1,88 @@
 package com.businessappstation.superstarmmjdispensaries;
 
-import android.app.Activity;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 
+public class ProductsFragment extends Fragment {
+    View CBDLiqRow, PremLiqRow, VaporPenRow, VaporPenAccsRow, ClothRow;
+    Uri webpage;
+    Intent webIntent;
 
-public class ProductsFragment extends Fragment implements AbsListView.OnItemClickListener {
-
-    /**
-     * The fragment's ListView/GridView.
-     */
-    private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private ListAdapter mAdapter;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ProductsFragment() {
+        // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_products, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        View rootView = inflater.inflate(R.layout.fragment_products_list, container, false);
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+        viewsInstantiate(rootView);
+        viewsClickListeners();
 
-        return view;
+        return rootView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-
+    private void viewsInstantiate(View v){
+        CBDLiqRow = v.findViewById(R.id.cbd_eliquid_row);
+        PremLiqRow = v.findViewById(R.id.premium_liquid_row);
+        VaporPenRow = v.findViewById(R.id.vapor_pen_row);
+        VaporPenAccsRow = v.findViewById(R.id.vapor_pen_accs_row);
+        ClothRow = v.findViewById(R.id.cloth_apprl_row);
     }
 
-    @Override
-    public void onDetach() {
+    private void viewsClickListeners(){
 
+        CBDLiqRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webpage = Uri.parse(getResources().getString(R.string.web_link_cbd));
+                webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(webIntent);
+            }
+        });
+        PremLiqRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webpage = Uri.parse(getResources().getString(R.string.web_link_eliq));
+                webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(webIntent);
+            }
+        });
+        VaporPenRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webpage = Uri.parse(getResources().getString(R.string.web_link_vppen));
+                webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(webIntent);
+            }
+        });
+        VaporPenAccsRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webpage = Uri.parse(getResources().getString(R.string.web_link_vppen_accs));
+                webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(webIntent);
+            }
+        });
+        ClothRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webpage = Uri.parse(getResources().getString(R.string.web_link_clothing));
+                webIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(webIntent);
+            }
+        });
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 
 }

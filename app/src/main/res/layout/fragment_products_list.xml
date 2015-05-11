@@ -1,13 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <!--tools:context="com.businessappstation.superstarmmjdispensaries.ProductsFragment">-->
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.businessappstation.superstarmmjdispensaries.ProductsFragment"
+    tools:showIn="@layout/refs">
 
-    <ListView android:id="@android:id/list" android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
-    <TextView android:id="@android:id/empty" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:gravity="center" />
+    <TableLayout
+        android:id="@+id/products_table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:stretchColumns="1"
+        android:weightSum="5"
+        android:clickable="true">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:weightSum="4"
+            android:id="@+id/cbd_eliquid_row"
+            android:layout_gravity="center_vertical"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView0"
+                android:src="@drawable/cbdoils"
+                android:cropToPadding="true"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="@string/holy_liquid_text"
+                android:id="@+id/textView"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+
+        <ImageView android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:weightSum="4"
+            android:id="@+id/premium_liquid_row"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView1"
+                android:src="@drawable/eliquid"
+                android:cropToPadding="true"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="@string/superstar_prem_liquid_text"
+                android:id="@+id/textView1"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+
+        <ImageView android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:weightSum="4"
+            android:id="@+id/vapor_pen_row"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView2"
+                android:src="@drawable/pens"
+                android:cropToPadding="true"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="@string/superstar_pen_text"
+                android:id="@+id/textView2"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+
+        <ImageView android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:weightSum="4"
+            android:id="@+id/vapor_pen_accs_row"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3"
+                android:src="@drawable/suplys"
+                android:cropToPadding="true"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="@string/superstar_accs_text"
+                android:id="@+id/textView3"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+
+        <ImageView android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:weightSum="4"
+            android:id="@+id/cloth_apprl_row"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView4"
+                android:src="@drawable/cloth"
+                android:cropToPadding="true"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:text="@string/clothing_and_apparel_text"
+                android:id="@+id/textView4"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+
+
+    </TableLayout>
 </FrameLayout>
