@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 public class ProductsFragment extends Fragment {
     View CBDLiqRow, PremLiqRow, VaporPenRow, VaporPenAccsRow, ClothRow;
+    //ListView lView; create listView instead
     Uri webpage;
     Intent webIntent;
 
@@ -25,7 +26,7 @@ public class ProductsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_products_list, container, false);
-
+        //lView = rootView.findViewById(R.id.)
         viewsInstantiate(rootView);
         viewsClickListeners();
 

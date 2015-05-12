@@ -8,19 +8,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 
-
 public class MainActivity extends FragmentActivity {
-    //final ActionBar actionBar = getActionBar();
-    //private List<SamplePagerItem>
+
+    public static FragmentManager fragmentManager;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        //maps fragment
+        fragmentManager = getSupportFragmentManager();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -30,10 +30,6 @@ public class MainActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        //tabs should be seen in action bar
-        //since target us not only lollipop, it is possible to use setNavigationMode
-        //or may be replaced with PagerTabStrip
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
     }
 
@@ -53,8 +49,8 @@ public class MainActivity extends FragmentActivity {
                     fragment = new HomeFragment();
                     return fragment;
                 case 1:
-                    fragment = new HomeFragment();
-                    //fragment = new MapsFragment();
+                    //fragment = new HomeFragment();
+                    fragment = new MapsFragment();
                     //implement maps fragment https://developers.google.com/maps/documentation/android/start#install_the_android_sdk
                     return fragment;
                 case 2:
@@ -62,13 +58,13 @@ public class MainActivity extends FragmentActivity {
                     //fragment = new HomeFragment();
                     return fragment;
                 case 3:
-                   // fragment = new HomeFragment();
+                    // fragment = new HomeFragment();
                     fragment = new QRFragment();
                     return fragment;
-                default:
-                    return null;
-            }
 
+            }
+            //return fragment;
+            return null;
 
         }
 

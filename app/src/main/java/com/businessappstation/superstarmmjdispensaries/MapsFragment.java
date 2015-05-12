@@ -1,27 +1,39 @@
 package com.businessappstation.superstarmmjdispensaries;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsFragment extends Fragment {
     private static View view;
-    private FragmentManager fManager;
-
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private static GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static Double latitude, longitude;
+    private MainActivity mapsContext;
+
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        mapsContext = (MainActivity) activity;
+        super.onAttach(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,33 +41,49 @@ public class MapsFragment extends Fragment {
         if (container == null) {
             return null;
         }
-        view = (RelativeLayout) inflater.inflate(R.layout.fragment_maps, container, false);
+        view = inflater.inflate(R.layout.fragment_maps, container, false);
         // Passing harcoded values for latitude & longitude. Please change as per your need. This is just used to drop a Marker on the Map
         latitude = 26.78;
         longitude = 72.56;
-       // fManager = MainActivity.fragmentManager;
-
-        setUpMapIfNeeded(); // For setting up the MapFragment
-
+        setUpMapIfNeeded();
         return view;
     }
 
+    private void setUpMapIfNeeded(){
+        if( mMap == null ){
+            SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.location_map);
 
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            SupportMapFragment mySupportMapFragment = (SupportMapFragment) fManager.findFragmentById(R.id.map);
-
-            mMap = mySupportMapFragment.getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
+            if( smf != null ){
+                Toast.makeText(getActivity(), "Let's go!!", Toast.LENGTH_SHORT).show();
+                mMap = smf.getMap();
+            }else{
+                Toast.makeText(getActivity(), "SMF is null...", Toast.LENGTH_SHORT).show();
             }
+
+            if( mMap != null ){
+
+                setUpMap();
+
+            }
+
         }
     }
-
-    private void setUpMap() {
+    private static void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    }
+
+    /**
+     * * The mapfragment's id must be removed from the FragmentManager
+     * *** or else if the same it is passed on the next time then
+     * *** app will crash ***
+     */
+    @Override
+    public void onDestroyView() {
+        //SupportMapFragment
+        Fragment f = (Fragment) getFragmentManager().findFragmentById(R.id.location_map);
+        if (f!=null){
+            getFragmentManager().beginTransaction().remove(f).commit();
+        }
+        super.onDestroyView();
     }
 }
