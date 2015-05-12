@@ -33,10 +33,10 @@ public class QRFragment extends Fragment implements IScanResultHandler {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_qr, container, false);
+       // View rootView =
 
         //should return view
-        return rootView;
+        return inflater.inflate(R.layout.fragment_qr, container, false);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class QRFragment extends Fragment implements IScanResultHandler {
         btn.setOnClickListener(new View.OnClickListener() {
                                    @Override
                                    public void onClick(View v) {
-                                       goToLink(v);
+                                       goToLink();
                                    }
                                }
         );
@@ -80,8 +80,17 @@ public class QRFragment extends Fragment implements IScanResultHandler {
         uri = Uri.parse(scanResult.getRawResult().getText());
     }
 
-    public void goToLink(View v) {
+    public void goToLink() {
         webIntent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(webIntent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Fragment f = getFragmentManager().findFragmentById(R.id.qr_fragment_layout);
+        if (f!=null){
+            getFragmentManager().beginTransaction().remove(f).commit();
+        }
     }
 }
