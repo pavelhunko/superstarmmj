@@ -58,8 +58,8 @@ public class MainActivity extends FragmentActivity {
                     //fragment = new HomeFragment();
                     return fragment;
                 case 3:
-                    // fragment = new HomeFragment();
-                    fragment = new QRFragment();
+                     fragment = new HomeFragment();
+                    //fragment = new QRFragment();
                     return fragment;
 
             }
