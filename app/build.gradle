@@ -26,4 +26,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.0.0'
     compile files('libs/barcodelib.jar')
     compile files('libs/core.jar')
+    compile files('libs/opencsv-2.4.jar')
+    compile files('libs/zxingfragmentlib-master.zip')
 }

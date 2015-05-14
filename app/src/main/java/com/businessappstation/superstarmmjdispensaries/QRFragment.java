@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,8 @@ import java.util.EnumSet;
 
 public class QRFragment extends Fragment implements IScanResultHandler {
 
-    BarcodeFragment barcodeFragment;
+    private static final String QR_TAG = "QR";
+    BarcodeFragment qrFragment;
     Button btn;
     Uri uri;
     Intent webIntent;
@@ -43,9 +45,12 @@ public class QRFragment extends Fragment implements IScanResultHandler {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        barcodeFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
-        barcodeFragment.setScanResultHandler(this);
-        //barcodeFragment.getView().setLayoutParams();
+        qrFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
+        //qrFragment = BarcodeFragment.instantiate()
+        qrFragment.setScanResultHandler(this);
+        //FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        //fragmentTransaction.add(qrFragment, QR_TAG).commit();
+
 
         btn = ((Button) view.findViewById(R.id.scan_button));
         btn.setEnabled(false);
@@ -57,7 +62,7 @@ public class QRFragment extends Fragment implements IScanResultHandler {
                                }
         );
 
-        barcodeFragment.setDecodeFor(EnumSet.of(BarcodeFormat.QR_CODE));
+        qrFragment.setDecodeFor(EnumSet.of(BarcodeFormat.QR_CODE));
     }
 
     @Override
@@ -87,10 +92,11 @@ public class QRFragment extends Fragment implements IScanResultHandler {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-        Fragment f = getFragmentManager().findFragmentById(R.id.qr_fragment_layout);
+
+        Fragment f = getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
         if (f!=null){
             getFragmentManager().beginTransaction().remove(f).commit();
         }
+        super.onDestroyView();
     }
 }
