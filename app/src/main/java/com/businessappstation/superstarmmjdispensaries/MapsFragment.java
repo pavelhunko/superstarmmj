@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -129,7 +130,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 return true;
             }
         });
-        //placeDispensariesOnMap(mDispensariesList, googleMap);
         googleMap.setOnCameraChangeListener(getCameraChangeListener());
     }
 
@@ -154,7 +154,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 longtitude = Double.parseDouble(disp.get("long"));
                 if (bounds.contains(new LatLng(lattitude, longtitude))) {
                     if (!visibleMarkers.containsKey(id)) {
-                        visibleMarkers.put(id, googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude, longtitude))));
+                        visibleMarkers.put(id, googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude, longtitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))));
                     }
                 } else {
                     if (visibleMarkers.containsKey(id)) {
@@ -164,11 +164,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                 }
                 visibleMarkers.size();
-                //Marker marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(disp.get("lat")), Double.parseDouble(disp.get("long")))));
-                //markers.add(marker);
+
             }
         }
-        //markers.size();
+
 
     }
 
@@ -249,6 +248,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
+            //implement progressbar drawer
         }
     }
 }

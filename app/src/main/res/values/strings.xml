@@ -24,5 +24,8 @@
     <string name="web_link_vppen">https://superstarvaporpens.com/product-category/superstar-vapor-pen/</string>
     <string name="web_link_vppen_accs">https://superstarvaporpens.com/product-category/superstar-vapor-pen-accessories/</string>
     <string name="web_link_clothing">https://superstarvaporpens.com/product-category/superstar-clothing-apperal/</string>
-    <string name="qr_fragmetn_button_text">Watch Video!</string>
+    <string name="qr_fragmetn_button_text">Follow the Link!</string>
+    <string name="title_activity_splash">Splash</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

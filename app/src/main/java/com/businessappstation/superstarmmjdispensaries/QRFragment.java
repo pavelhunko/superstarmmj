@@ -35,7 +35,7 @@ public class QRFragment extends Fragment implements IScanResultHandler {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       // View rootView =
+        // View rootView =
 
         //should return view
         return inflater.inflate(R.layout.fragment_qr, container, false);
@@ -45,12 +45,12 @@ public class QRFragment extends Fragment implements IScanResultHandler {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        qrFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
+        //qrFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
         //qrFragment = BarcodeFragment.instantiate()
-        qrFragment.setScanResultHandler(this);
+        //qrFragment.setScanResultHandler(this);
         //FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         //fragmentTransaction.add(qrFragment, QR_TAG).commit();
-
+        instantiateBarcodeFragment();
 
         btn = ((Button) view.findViewById(R.id.scan_button));
         btn.setEnabled(false);
@@ -62,19 +62,13 @@ public class QRFragment extends Fragment implements IScanResultHandler {
                                }
         );
 
+
+    }
+
+    private void instantiateBarcodeFragment(){
+        qrFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
+        qrFragment.setScanResultHandler(this);
         qrFragment.setDecodeFor(EnumSet.of(BarcodeFormat.QR_CODE));
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
     }
 
 
@@ -92,11 +86,11 @@ public class QRFragment extends Fragment implements IScanResultHandler {
 
     @Override
     public void onDestroyView() {
-
-        Fragment f = getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
-        if (f!=null){
+       /* Fragment f = getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
+        if (f != null) {
             getFragmentManager().beginTransaction().remove(f).commit();
-        }
+        }*/
+
         super.onDestroyView();
     }
 }

@@ -25,13 +25,19 @@ public class MainActivity extends FragmentActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager);
+        //mSectionsPagerAdapter.set
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        //fi
+        mViewPager.setOffscreenPageLimit(3);
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
     }
+
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
