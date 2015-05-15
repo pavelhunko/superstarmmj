@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         applicationId "com.businessappstation.superstarmmjdispensaries"
@@ -19,13 +19,25 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+
+    maven {
+        url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
+    }
+}
+
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.google.android.gms:play-services:7.0.0'
-    compile files('libs/barcodelib.jar')
-    compile files('libs/core.jar')
     compile files('libs/opencsv-2.4.jar')
-    compile files('libs/zxingfragmentlib-master.zip')
+    // Zxing libraries
+    compile 'com.embarkmobile:zxing-android-minimal:2.0.0@aar'
+    compile 'com.embarkmobile:zxing-android-integration:2.0.0@aar'
+    compile 'com.google.zxing:core:3.0.1'
+    //compile 'com.embarkmobile:zxing-android-minimal:1.2.1@aar'
+    //compile 'com.google.zxing:core:2.2'
 }

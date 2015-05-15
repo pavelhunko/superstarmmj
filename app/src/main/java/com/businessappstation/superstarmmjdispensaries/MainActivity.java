@@ -1,5 +1,6 @@
 package com.businessappstation.superstarmmjdispensaries;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,6 +34,18 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //code catched
+
+//        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+   //     if (scanResult != null){
+  //          Fragment qrFrame = QRFragment.newInstance(scanResult.toString());
+   //         fragmentManager.beginTransaction().replace(R.id.qr_fragment_layout, qrFrame).commit();
+        //}
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -60,6 +73,7 @@ public class MainActivity extends FragmentActivity {
                 case 3:
                     // fragment = new HomeFragment();
                     fragment = new QRFragment();
+                    //QRFragment.setPa
                     return fragment;
 
             }
