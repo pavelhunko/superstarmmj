@@ -8,7 +8,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
+        android:layout_gravity="bottom"
         android:background="#6c8442"
         android:textColor="#fff"
         android:paddingTop="5dp"

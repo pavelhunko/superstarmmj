@@ -59,7 +59,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     Location location;
     private LatLng myLocation;
     private ArrayList<HashMap<String, String>> mDispensariesList = new ArrayList<>();
-    //lookthrough example project
 
     @Override
     public void onAttach(Activity activity) {
