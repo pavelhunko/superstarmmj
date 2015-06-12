@@ -6,10 +6,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,7 +33,7 @@ import java.util.concurrent.ExecutionException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private static final float DEFAULT_ZOOM = 9;
     private static String KEY_ID = "id";
@@ -53,22 +57,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private static String MAP_FRAGMENT = "MapFragment";
     private final LatLng nyLocation = new LatLng(40.7033127, -73.979681);
+    private static GoogleApiClient mGoogleAPIClient;
+    private static String TAG = "maps-fragment";
     ArrayList<HashMap<String, String>> dispsList = new ArrayList<HashMap<String, String>>();
     SupportMapFragment mapFragment;
     View view;
-    Location location;
+    Location mLocation;
     private LatLng myLocation;
     private ArrayList<HashMap<String, String>> mDispensariesList = new ArrayList<>();
 
     @Override
     public void onAttach(Activity activity) {
+        Log.i(TAG, "onAttach() entered" );
         super.onAttach(activity);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView() entered");
         setRetainInstance(true);
+        buildGoogleAPIClient();
+        mGoogleAPIClient.connect();
         if (container == null) {
             return null;
         }
@@ -78,6 +88,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Log.i(TAG, "onViewCreated entered");
         super.onViewCreated(view, savedInstanceState);
 
         mapFragment = SupportMapFragment.newInstance();
@@ -104,13 +115,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap gMap) {
+        Log.i(TAG, "onMapReady() entered");
         googleMap = gMap;
 
         googleMap.setMyLocationEnabled(true);
+        googleMap.setOnMarkerClickListener(this);
 
-        location = googleMap.getMyLocation();
-        if (location != null) {
-            myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        if (mLocation != null) {
+            myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
         } else {
             //if my location is not defined yet - use NY as default location
@@ -119,9 +132,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
-                location = googleMap.getMyLocation();
-                if (location != null) {
-                    myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                Log.i(TAG, "onMyLocationButtonClick() is processed");
+               // mLocation = googleMap.getMyLocation();
+                if (mLocation != null) {
+                    myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
                 }
 
@@ -141,6 +155,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         };
     }
 
+    protected synchronized void buildGoogleAPIClient(){
+        Log.i(TAG, "buildGoogleAPIClient entered");
+        mGoogleAPIClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
     private void placeDispensariesOnMap(ArrayList<HashMap<String, String>> mDispensariesList) {
         if (googleMap != null) {
             LatLngBounds bounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
@@ -153,7 +176,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 longtitude = Double.parseDouble(disp.get("long"));
                 if (bounds.contains(new LatLng(lattitude, longtitude))) {
                     if (!visibleMarkers.containsKey(id)) {
-                        visibleMarkers.put(id, googleMap.addMarker(new MarkerOptions().position(new LatLng(lattitude, longtitude)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))));
+                        visibleMarkers.put(id, googleMap.addMarker(
+                                new MarkerOptions().position(new LatLng(lattitude, longtitude))
+                                                   .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                                                   .title(disp.get("name")))); //edit snippet
+
                     }
                 } else {
                     if (visibleMarkers.containsKey(id)) {
@@ -184,6 +211,31 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
 
         super.onDestroyView();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "onConnected() entered");
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient);
+        //onMapReady(googleMap);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG, "onConnectionFailed entered");
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.i(TAG, "onMarkerClick() entered");
+        marker.showInfoWindow();
+        return true;
     }
 
     public class DispensariesDownloaderTask extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
