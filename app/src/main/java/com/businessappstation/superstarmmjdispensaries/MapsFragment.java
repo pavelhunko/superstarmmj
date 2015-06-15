@@ -1,6 +1,7 @@
 package com.businessappstation.superstarmmjdispensaries;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener , GoogleMap.OnInfoWindowClickListener{
 
     private static final float DEFAULT_ZOOM = 9;
     private static String KEY_ID = "id";
@@ -46,7 +47,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private static String KEY_SUBSLUG = "subslug";
     private static String KEY_TYPE = "type";
     private static String KEY_PHONE = "phone";
-    private static String KEY_WEBSITE = "website";
+    private static String KEY_URl = "website";
     private static String KEY_EMAIL = "email";
     private static String KEY_LAT = "lat";
     private static String KEY_LONG = "long";
@@ -57,6 +58,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private static String MAP_FRAGMENT = "MapFragment";
     private final LatLng nyLocation = new LatLng(40.7033127, -73.979681);
+    HashMap<Integer, Marker> visibleMarkers = new HashMap<>();
     private static GoogleApiClient mGoogleAPIClient;
     private static String TAG = "maps-fragment";
     ArrayList<HashMap<String, String>> dispsList = new ArrayList<HashMap<String, String>>();
@@ -120,6 +122,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnInfoWindowClickListener(this);
 
 
         if (mLocation != null) {
@@ -167,7 +170,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private void placeDispensariesOnMap(ArrayList<HashMap<String, String>> mDispensariesList) {
         if (googleMap != null) {
             LatLngBounds bounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
-            HashMap<Integer, Marker> visibleMarkers = new HashMap<>();
+
             double lattitude, longtitude;
             int id;
             for (HashMap<String, String> disp : mDispensariesList) {
@@ -238,6 +241,37 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         return true;
     }
 
+
+    private static Object getIdFromValue(HashMap hashMap, Object s){
+        for (Object o : hashMap.keySet()){
+           //?? String str = (String) hashMap.get(o);
+            if (hashMap.get(o).equals(s))
+                return o;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //create Dialog, that proposes to "call", "go to webpage", "drop a message" to email
+        String dispID = getIdFromValue(visibleMarkers, marker).toString();
+        HashMap<String, String> markerHashMap = mDispensariesList.get(Integer.parseInt(dispID));
+        String name = markerHashMap.get("name");
+        String email = markerHashMap.get("email");
+        String url = markerHashMap.get("url");
+        String phone = markerHashMap.get("phone");
+        createCustomUserInteractionDialog(name, email, url, phone);
+
+
+    }
+
+    private void createCustomUserInteractionDialog(String name, String email, String url, String phone){
+        //creates dialog, allowing user to follow the link, write an email, perform a phonecall
+        final Dialog dialog = new Dialog(getActivity());
+    }
+
+
     public class DispensariesDownloaderTask extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
 
         public DispensariesDownloaderTask() {
@@ -264,7 +298,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                         String superSlug = nextLine[7];
                         String subSlug = nextLine[8];
                         String address = nextLine[9];
-                        String website = nextLine[10];
+                        String url = nextLine[10];
                         String email = nextLine[11];
                         String phone = nextLine[12];
                         String since = nextLine[13];
@@ -276,7 +310,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                         sublist.put(KEY_ADDRESS, address);
                         sublist.put(KEY_PHONE, phone);
                         sublist.put(KEY_SINCE, since);
-                        sublist.put(KEY_WEBSITE, website);
+                        sublist.put(KEY_URl, url);
                         sublist.put(KEY_EMAIL, email);
                         sublist.put(KEY_LAT, lat);
                         sublist.put(KEY_LONG, lon);
