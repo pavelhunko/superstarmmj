@@ -61,7 +61,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     HashMap<Integer, Marker> visibleMarkers = new HashMap<>();
     private static GoogleApiClient mGoogleAPIClient;
     private static String TAG = "maps-fragment";
-    ArrayList<HashMap<String, String>> dispsList = new ArrayList<HashMap<String, String>>();
+    ArrayList<HashMap<String, String>> dispsList = new ArrayList<>();
     SupportMapFragment mapFragment;
     View view;
     Location mLocation;
@@ -105,9 +105,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             try {
 
                 mDispensariesList = dispensariesDownloaderTask.execute().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
@@ -255,6 +253,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onInfoWindowClick(Marker marker) {
         //create Dialog, that proposes to "call", "go to webpage", "drop a message" to email
+        //perform nullcheck
+
         String dispID = getIdFromValue(visibleMarkers, marker).toString();
         HashMap<String, String> markerHashMap = mDispensariesList.get(Integer.parseInt(dispID));
         String name = markerHashMap.get("name");
@@ -282,7 +282,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         protected ArrayList<HashMap<String, String>> doInBackground(String... params) {
             //download disps here
 
-            ArrayList<HashMap<String, String>> dispensariesList = new ArrayList<HashMap<String, String>>();
+            ArrayList<HashMap<String, String>> dispensariesList = new ArrayList<>();
             try {
                 CSVReader csvReader = new CSVReader(new InputStreamReader(getActivity().getAssets().open("dis.csv")));
                 String[] nextLine;
@@ -304,7 +304,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                         String since = nextLine[13];
                         String name = nextLine[14];
 
-                        HashMap<String, String> sublist = new HashMap<String, String>();
+                        HashMap<String, String> sublist = new HashMap<>();
                         sublist.put(KEY_ID, id);
                         sublist.put(KEY_NAME, name);
                         sublist.put(KEY_ADDRESS, address);

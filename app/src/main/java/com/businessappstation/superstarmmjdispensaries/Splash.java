@@ -1,9 +1,9 @@
 package com.businessappstation.superstarmmjdispensaries;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBarActivity;
 
 
 public class Splash extends ActionBarActivity {
