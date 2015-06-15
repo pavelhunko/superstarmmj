@@ -21,6 +21,7 @@ public class Splash extends ActionBarActivity {
                 Intent mainActivity = new Intent(Splash.this, MainActivity.class);
                 Splash.this.startActivity(mainActivity);
                 Splash.this.finish();
+
             }
         }, SPLASH_DISPLAY_LENGTH);
     }
