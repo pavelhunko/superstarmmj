@@ -83,8 +83,8 @@ public class ProductsFragment extends Fragment implements View.OnClickListener {
                 webpage = Uri.parse(getResources().getString(R.string.web_link_clothing));
 
         }
-        //????
-        if (!webpage.equals(null)) {
+
+        if (webpage != null && !webpage.equals(Uri.EMPTY)) {
             webIntent.setData(webpage);
             startActivity(webIntent);
         }
