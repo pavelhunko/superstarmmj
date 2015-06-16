@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener , GoogleMap.OnInfoWindowClickListener{
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final float DEFAULT_ZOOM = 9;
     private static String KEY_ID = "id";
@@ -57,21 +57,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private static String MAP_FRAGMENT = "MapFragment";
-    private final LatLng nyLocation = new LatLng(40.7033127, -73.979681);
     private static GoogleApiClient mGoogleAPIClient;
     private static String TAG = "maps-fragment";
+    private final LatLng nyLocation = new LatLng(40.7033127, -73.979681);
+    SupportMapFragment mapFragment;
+    View view;
+    Location mLocation;
     private LatLng myLocation;
     private ArrayList<HashMap<String, String>> mDispensariesList = new ArrayList<>();
     private HashMap<Integer, Marker> visibleMarkers = new HashMap<>();
 
-    SupportMapFragment mapFragment;
-    View view;
-    Location mLocation;
+    private static Object getIdFromValue(HashMap hashMap, Object s) {
+        for (Object o : hashMap.keySet()) {
+            //?? String str = (String) hashMap.get(o);
+            if (hashMap.get(o).equals(s))
+                return o;
+        }
 
+        return null;
+    }
 
     @Override
     public void onAttach(Activity activity) {
-        Log.i(TAG, "onAttach() entered" );
+        Log.i(TAG, "onAttach() entered");
         super.onAttach(activity);
     }
 
@@ -91,10 +99,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Log.i(TAG, "onViewCreated entered");
         super.onViewCreated(view, savedInstanceState);
-
         buildGoogleAPIClient();
-        //??? connect?
-
 
         mapFragment = SupportMapFragment.newInstance();
         mapFragment.getMapAsync(this);
@@ -115,16 +120,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     }
 
-
     @Override
     public void onMapReady(GoogleMap gMap) {
         Log.i(TAG, "onMapReady() entered");
+
         googleMap = gMap;
 
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
-
+        googleMap.setOnMyLocationButtonClickListener(this);
+        googleMap.setOnCameraChangeListener(getCameraChangeListener());
 
         if (mLocation != null) {
             myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
@@ -133,21 +139,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             //if my location is not defined yet - use NY as default location
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(nyLocation, DEFAULT_ZOOM));
         }
-        googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-            @Override
-            public boolean onMyLocationButtonClick() {
-                Log.i(TAG, "onMyLocationButtonClick() is processed");
-               // mLocation = googleMap.getMyLocation();
-                if (mLocation != null) {
-                    myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
-                }
 
-
-                return true;
-            }
-        });
-        googleMap.setOnCameraChangeListener(getCameraChangeListener());
     }
 
     public GoogleMap.OnCameraChangeListener getCameraChangeListener() {
@@ -159,7 +151,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         };
     }
 
-    private void buildGoogleAPIClient(){
+    private void buildGoogleAPIClient() {
         Log.i(TAG, "buildGoogleAPIClient entered");
         mGoogleAPIClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -182,8 +174,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     if (!visibleMarkers.containsKey(id)) {
                         visibleMarkers.put(id, googleMap.addMarker(
                                 new MarkerOptions().position(new LatLng(lattitude, longtitude))
-                                                   .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-                                                   .title(disp.get("name")))); //edit snippet
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                                        .title(disp.get("name")))); //edit snippet
 
                     }
                 } else {
@@ -200,7 +192,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
 
     }
-
 
     @Override
     public void onResume() {
@@ -254,17 +245,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         return true;
     }
 
-
-    private static Object getIdFromValue(HashMap hashMap, Object s){
-        for (Object o : hashMap.keySet()){
-           //?? String str = (String) hashMap.get(o);
-            if (hashMap.get(o).equals(s))
-                return o;
-        }
-
-        return null;
-    }
-
     @Override
     public void onInfoWindowClick(Marker marker) {
         //create Dialog, that proposes to "call", "go to webpage", "drop a message" to email
@@ -281,9 +261,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     }
 
-    private void createCustomUserInteractionDialog(String name, String email, String url, String phone){
+    private void createCustomUserInteractionDialog(String name, String email, String url, String phone) {
         //creates dialog, allowing user to follow the link, write an email, perform a phonecall
         final Dialog dialog = new Dialog(getActivity());
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Log.i(TAG, "onMyLocationButtonClick() is processed");
+        if (mLocation != null) {
+            myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
+        }
+        return false;
     }
 
 

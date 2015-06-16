@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.abhi.barcode.frag.libv2.BarcodeFragment;
 import com.abhi.barcode.frag.libv2.IScanResultHandler;
@@ -17,25 +16,21 @@ import com.google.zxing.BarcodeFormat;
 
 import java.util.EnumSet;
 
-public class QRFragment extends Fragment implements IScanResultHandler {
+public class QRFragment extends Fragment implements IScanResultHandler, View.OnClickListener{
 
-    private static final String QR_TAG = "QR";
+    private static final String TAG = "QR";
     BarcodeFragment qrFragment;
-    Button btn;
+    Button buttonFollow, buttonRescan;
     Uri uri;
     Intent webIntent;
+    //implement restart scan button
 
     public QRFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        // View rootView =
-
-        //should return view
         return inflater.inflate(R.layout.fragment_qr, container, false);
     }
 
@@ -43,52 +38,61 @@ public class QRFragment extends Fragment implements IScanResultHandler {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //qrFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
-        //qrFragment = BarcodeFragment.instantiate()
-        //qrFragment.setScanResultHandler(this);
-        //FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        //fragmentTransaction.add(qrFragment, QR_TAG).commit();
+        buttonFollow = (Button) view.findViewById(R.id.follow_button);
+        buttonRescan = (Button) view.findViewById(R.id.rescan_button);
+        disableButtons();
+
         instantiateBarcodeFragment();
-
-        btn = ((Button) view.findViewById(R.id.scan_button));
-        btn.setEnabled(false);
-        btn.setOnClickListener(new View.OnClickListener() {
-                                   @Override
-                                   public void onClick(View v) {
-                                       goToLink();
-                                   }
-                               }
-        );
-
-
+        setButtonsClickListener();
     }
 
-    private void instantiateBarcodeFragment(){
+    private void setButtonsClickListener() {
+        buttonFollow.setOnClickListener(this);
+        buttonRescan.setOnClickListener(this);
+    }
+
+
+    private void instantiateBarcodeFragment() {
         qrFragment = (BarcodeFragment) getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
         qrFragment.setScanResultHandler(this);
         qrFragment.setDecodeFor(EnumSet.of(BarcodeFormat.QR_CODE));
     }
 
+    private void enableButtons(){
+        buttonFollow.setEnabled(true);
+        buttonRescan.setEnabled(true);
+    }
+
+    private void disableButtons(){
+        buttonFollow.setEnabled(false);
+        buttonRescan.setEnabled(false);
+    }
+
 
     @Override
     public void scanResult(ScanResult scanResult) {
-        btn.setEnabled(true);
-        Toast.makeText(getActivity(), scanResult.getRawResult().getText(), Toast.LENGTH_LONG).show();
+        enableButtons();
         uri = Uri.parse(scanResult.getRawResult().getText());
     }
 
     public void goToLink() {
+        //check, if qrcode is valid
         webIntent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(webIntent);
     }
 
     @Override
-    public void onDestroyView() {
-       /* Fragment f = getChildFragmentManager().findFragmentById(R.id.qr_scan_fragment);
-        if (f != null) {
-            getFragmentManager().beginTransaction().remove(f).commit();
-        }*/
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.follow_button:
+                goToLink();
+                break;
+            case R.id.rescan_button:
+                disableButtons();
+                qrFragment.restart();
+                break;
+        }
 
-        super.onDestroyView();
+
     }
 }
