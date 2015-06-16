@@ -58,15 +58,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private static String MAP_FRAGMENT = "MapFragment";
     private final LatLng nyLocation = new LatLng(40.7033127, -73.979681);
-    HashMap<Integer, Marker> visibleMarkers = new HashMap<>();
     private static GoogleApiClient mGoogleAPIClient;
     private static String TAG = "maps-fragment";
-    ArrayList<HashMap<String, String>> dispsList = new ArrayList<>();
+    private LatLng myLocation;
+    private ArrayList<HashMap<String, String>> mDispensariesList = new ArrayList<>();
+    private HashMap<Integer, Marker> visibleMarkers = new HashMap<>();
+
     SupportMapFragment mapFragment;
     View view;
     Location mLocation;
-    private LatLng myLocation;
-    private ArrayList<HashMap<String, String>> mDispensariesList = new ArrayList<>();
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -79,8 +80,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView() entered");
         setRetainInstance(true);
-        buildGoogleAPIClient();
-        mGoogleAPIClient.connect();
         if (container == null) {
             return null;
         }
@@ -92,6 +91,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Log.i(TAG, "onViewCreated entered");
         super.onViewCreated(view, savedInstanceState);
+
+        buildGoogleAPIClient();
+        //??? connect?
+
 
         mapFragment = SupportMapFragment.newInstance();
         mapFragment.getMapAsync(this);
@@ -156,7 +159,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         };
     }
 
-    protected synchronized void buildGoogleAPIClient(){
+    private void buildGoogleAPIClient(){
         Log.i(TAG, "buildGoogleAPIClient entered");
         mGoogleAPIClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -198,6 +201,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mGoogleAPIClient.connect();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mGoogleAPIClient.disconnect();
+    }
 
     /**
      * * The mapfragment's id must be removed from the FragmentManager
