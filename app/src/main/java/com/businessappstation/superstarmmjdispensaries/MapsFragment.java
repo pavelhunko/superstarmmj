@@ -1,16 +1,24 @@
 package com.businessappstation.superstarmmjdispensaries;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,6 +42,8 @@ import java.util.concurrent.ExecutionException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import static com.businessappstation.superstarmmjdispensaries.MapsFragment.AlertDialogFragment.*;
+
 public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private static final float DEFAULT_ZOOM = 9;
@@ -47,7 +57,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private static String KEY_SUBSLUG = "subslug";
     private static String KEY_TYPE = "type";
     private static String KEY_PHONE = "phone";
-    private static String KEY_URl = "website";
+    private static String KEY_URl = "url";
     private static String KEY_EMAIL = "email";
     private static String KEY_LAT = "lat";
     private static String KEY_LONG = "long";
@@ -251,20 +261,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         //perform nullcheck
 
         String dispID = getIdFromValue(visibleMarkers, marker).toString();
-        HashMap<String, String> markerHashMap = mDispensariesList.get(Integer.parseInt(dispID));
-        String name = markerHashMap.get("name");
-        String email = markerHashMap.get("email");
-        String url = markerHashMap.get("url");
-        String phone = markerHashMap.get("phone");
-        createCustomUserInteractionDialog(name, email, url, phone);
+        HashMap<String, String> markerHashMap = mDispensariesList.get(Integer.parseInt(dispID) - 1);
+        Bundle args = new Bundle();
+
+        args.putString("name", markerHashMap.get("name"));
+        args.putString("email", markerHashMap.get("email"));
+        args.putString("url", markerHashMap.get("url"));
+        args.putString("phone", markerHashMap.get("phone"));
+
+        DialogFragment dialogFragment = newInstance(args);
+        dialogFragment.show(getFragmentManager(), "dialog");//??
 
 
     }
 
-    private void createCustomUserInteractionDialog(String name, String email, String url, String phone) {
-        //creates dialog, allowing user to follow the link, write an email, perform a phonecall
-        final Dialog dialog = new Dialog(getActivity());
-    }
 
     @Override
     public boolean onMyLocationButtonClick() {
@@ -276,6 +286,89 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         return false;
     }
 
+    //class for handling dialog events
+    public static class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
+
+        public static AlertDialogFragment newInstance(Bundle args) {
+            AlertDialogFragment dFragment = new AlertDialogFragment();
+            dFragment.setArguments(args);
+            return dFragment;
+        }
+
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setIcon(R.drawable.marker)
+                    .setTitle((CharSequence) getArguments().get("name"))
+                    .setItems(R.array.map_dialog_action_chooser, this)
+                    .setNegativeButton(R.string.map_fragment_close_dialog_button, this);
+            return builder.create();
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            Intent intent = new Intent();
+            String actionDesc = null;
+            Uri action = null;
+            switch (which) {
+                case 0:
+                    action = Uri.parse(getArguments().getString("url"));
+
+
+                    if (!action.equals(Uri.EMPTY) && !action.equals(Uri.parse("NA"))) {
+                        action = Uri.parse("http://"+ action);
+                        intent.setAction(Intent.ACTION_VIEW);
+
+                    } else actionDesc = "Website";
+                    break;
+                case 1:
+                    action = Uri.parse(getArguments().getString("email"));
+
+
+                    if (!action.equals(Uri.EMPTY) && !action.equals(Uri.parse("NA"))) {
+
+                        //String emailcomposer = "?subject=" + Uri.encode("Request From SuperstarDispensary app") + "&body=" + Uri.encode("");
+                        action = Uri.parse("mailto:" + action + "?subject=" + Uri.encode("Request From SuperstarDispensary app") + "&body=" + Uri.encode(""));
+                        intent.setAction(Intent.ACTION_SENDTO);
+
+                    } else actionDesc = "Email";
+                    break;
+                case 2:
+                    action = Uri.parse(getArguments().getString("phone"));
+
+
+                    if (!action.equals(Uri.EMPTY) && !action.equals(Uri.parse("NA"))) {
+                        action = Uri.parse("tel:" + action);
+                        intent.setAction(Intent.ACTION_DIAL);
+                        //intent.setData(action);
+                    } else actionDesc = "Phone";
+                    break;
+
+
+            }
+            if (actionDesc != null && !actionDesc.isEmpty()) {
+                Toast.makeText(getActivity(), actionDesc + " is not available!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (action != null) {
+                intent.setData(action);
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
+        }
+
+    }
 
     public class DispensariesDownloaderTask extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
 
@@ -341,4 +434,5 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             //implement progressbar drawer
         }
     }
+
 }

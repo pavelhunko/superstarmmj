@@ -19,4 +19,10 @@
     <string name="web_link_clothing">https://superstarvaporpens.com/product-category/superstar-clothing-apperal/</string>
     <string name="qr_fragment_follow_button_text">Follow the Link!</string>
     <string name="qr_fragment_rescan_button_text">Re-Scan</string>
+    <string name="map_fragment_close_dialog_button">Close</string>
+    <string-array name="map_dialog_action_chooser">
+        <item>Go to website</item>
+        <item>Write an e-mail</item>
+        <item>Call Dispensary</item>
+    </string-array>
 </resources>
