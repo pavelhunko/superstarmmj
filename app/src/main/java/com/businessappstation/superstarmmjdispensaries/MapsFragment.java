@@ -44,7 +44,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import static com.businessappstation.superstarmmjdispensaries.MapsFragment.AlertDialogFragment.*;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMyLocationButtonClickListener {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final float DEFAULT_ZOOM = 9;
     private static String KEY_ID = "id";
@@ -65,7 +65,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private static String KEY_CITY = "city";
     private static String KEY_ZIPCODE = "zipcode";
 
-    private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
+    //private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private static String MAP_FRAGMENT = "MapFragment";
     private static GoogleApiClient mGoogleAPIClient;
     private static String TAG = "maps-fragment";
@@ -131,35 +131,56 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
     @Override
-    public void onMapReady(GoogleMap gMap) {
+    public void onMapReady(final GoogleMap gMap) {
         Log.i(TAG, "onMapReady() entered");
 
-        googleMap = gMap;
+//        googleMap = gMap;
 
-        googleMap.setMyLocationEnabled(true);
-        googleMap.setOnMarkerClickListener(this);
-        googleMap.setOnInfoWindowClickListener(this);
-        googleMap.setOnMyLocationButtonClickListener(this);
-        googleMap.setOnCameraChangeListener(getCameraChangeListener());
+        gMap.setMyLocationEnabled(true);
+        gMap.setOnMarkerClickListener(this);
+        gMap.setOnInfoWindowClickListener(this);
+
+//        gMap.setOnCameraChangeListener(getCameraChangeListener());
 
         if (mLocation != null) {
             myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
+            gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
         } else {
             //if my location is not defined yet - use NY as default location
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(nyLocation, DEFAULT_ZOOM));
+            gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(nyLocation, DEFAULT_ZOOM));
         }
+
+        gMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                Log.i(TAG, "onMyLocationButtonClick() is processed");
+                if (mLocation != null) {
+                    myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
+                }
+                return false;
+            }
+        });
+
+        gMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                placeDispensariesOnMap(mDispensariesList, gMap);
+            }
+        });
+
+
 
     }
 
-    public GoogleMap.OnCameraChangeListener getCameraChangeListener() {
+    /*public GoogleMap.OnCameraChangeListener getCameraChangeListener() {
         return new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 placeDispensariesOnMap(mDispensariesList);
             }
         };
-    }
+    }*/
 
     private void buildGoogleAPIClient() {
         Log.i(TAG, "buildGoogleAPIClient entered");
@@ -170,9 +191,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 .build();
     }
 
-    private void placeDispensariesOnMap(ArrayList<HashMap<String, String>> mDispensariesList) {
-        if (googleMap != null) {
-            LatLngBounds bounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
+    private void placeDispensariesOnMap(ArrayList<HashMap<String, String>> mDispensariesList, GoogleMap map) {
+        if (map != null) {
+            LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
 
             double lattitude, longtitude;
             int id;
@@ -182,7 +203,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 longtitude = Double.parseDouble(disp.get("long"));
                 if (bounds.contains(new LatLng(lattitude, longtitude))) {
                     if (!visibleMarkers.containsKey(id)) {
-                        visibleMarkers.put(id, googleMap.addMarker(
+                        visibleMarkers.put(id, map.addMarker(
                                 new MarkerOptions().position(new LatLng(lattitude, longtitude))
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
                                         .title(disp.get("name")))); //edit snippet
@@ -276,15 +297,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
 
-    @Override
-    public boolean onMyLocationButtonClick() {
-        Log.i(TAG, "onMyLocationButtonClick() is processed");
-        if (mLocation != null) {
-            myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onMyLocationButtonClick() {
+//        Log.i(TAG, "onMyLocationButtonClick() is processed");
+//        if (mLocation != null) {
+//            myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+//            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
+//        }
+//        return false;
+//    }
 
     //class for handling dialog events
     public static class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
