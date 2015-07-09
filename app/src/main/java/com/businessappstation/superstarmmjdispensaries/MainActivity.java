@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -33,6 +35,11 @@ public class MainActivity extends FragmentActivity {
         mViewPager.setOffscreenPageLimit(3);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+
+        //Bind tabs to the ViewPager
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setViewPager(mViewPager);
 
 
     }

@@ -52,14 +52,6 @@ public class ProductsFragment extends Fragment implements View.OnClickListener {
         ClothRow.setOnClickListener(this);
     }
 
-   /* @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Fragment f = getFragmentManager().findFragmentById(R.id.products_list_layout);
-        if (f != null) {
-            getFragmentManager().beginTransaction().remove(f).commit();
-        }
-    }*/
 
     @Override
     public void onClick(View v) {
