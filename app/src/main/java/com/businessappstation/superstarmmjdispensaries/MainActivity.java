@@ -6,6 +6,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -39,6 +44,9 @@ public class MainActivity extends FragmentActivity {
 
         //Bind tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+
+//        tabs.set
+//        tabs.
         tabs.setViewPager(mViewPager);
 
 
@@ -46,11 +54,30 @@ public class MainActivity extends FragmentActivity {
 
 
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.CustomTabProvider{
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
+        final int[] ICONS_GRAY = new int[]{
+                R.drawable.home_icon_grey,
+                R.drawable.location_icon_grey,
+                R.drawable.products_icon_grey,
+                R.drawable.qr_icon_grey,
+        };
+        final int[] ICONS_GREEN = new int[]{
+                R.drawable.home_icon_green,
+                R.drawable.location_icon_green,
+                R.drawable.products_icon_green,
+                R.drawable.qr_icon_green,
+        };
+        final int[] TAB_TITLE = new int[]{
+                R.string.home_tab,
+                R.string.location_tab,
+                R.string.products_tab,
+                R.string.qr_tab,
+        };
 
         @Override
         public Fragment getItem(int position) {
@@ -62,21 +89,16 @@ public class MainActivity extends FragmentActivity {
                     fragment = new HomeFragment();
                     return fragment;
                 case 1:
-                    //fragment = new HomeFragment();
                     fragment = new MapsFragment();
-                    //implement maps fragment https://developers.google.com/maps/documentation/android/start#install_the_android_sdk
                     return fragment;
                 case 2:
                     fragment = new ProductsFragment();
-                    //fragment = new HomeFragment();
                     return fragment;
                 case 3:
-                    // fragment = new HomeFragment();
                     fragment = new QRFragment();
                     return fragment;
 
             }
-            //return fragment;
             return null;
 
         }
@@ -90,23 +112,32 @@ public class MainActivity extends FragmentActivity {
         //page titles
         @Override
         public CharSequence getPageTitle(int position) {
-            //Locale l = Locale.getDefault();
-            //https://github.com/astuetz/PagerSlidingTabStrip
-            switch (position) {
-                case 0:
-                    //title image
-                    return getString(R.string.home_tab);
-                case 1:
-                    //map
-                    return getString(R.string.location_tab);
-                case 2:
-                    //products
-                    return getString(R.string.products_tab);
-                case 3:
-                    //qrcode scanner
-                    return getString(R.string.qr_tab);
-            }
-            return null;
+           return getString(TAB_TITLE[position]);
+        }
+
+
+        @Override
+        public View getCustomTabView(ViewGroup viewGroup, int i) {
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            View view = inflater.inflate(R.layout.custom_tab_view, viewGroup, false);
+
+            ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
+            imageView.setImageDrawable(getDrawable(ICONS_GRAY[i]));
+
+            TextView textView = (TextView) view.findViewById(R.id.tab_name);
+            textView.setText(getPageTitle(i));
+            view.setPadding(0,0,0,20);
+            return view;
+        }
+
+        @Override
+        public void tabSelected(View view) {
+
+        }
+
+        @Override
+        public void tabUnselected(View view) {
+
         }
     }
 }

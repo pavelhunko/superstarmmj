@@ -42,8 +42,6 @@ import java.util.concurrent.ExecutionException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-import static com.businessappstation.superstarmmjdispensaries.MapsFragment.AlertDialogFragment.*;
-
 public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private static final float DEFAULT_ZOOM = 9;
@@ -290,7 +288,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         args.putString("url", markerHashMap.get("url"));
         args.putString("phone", markerHashMap.get("phone"));
 
-        DialogFragment dialogFragment = newInstance(args);
+        DialogFragment dialogFragment = AlertDialogFragment.newInstance(args);
         dialogFragment.show(getFragmentManager(), "dialog");//??
 
 
