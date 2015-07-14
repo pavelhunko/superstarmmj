@@ -23,7 +23,6 @@ public class QRFragment extends Fragment implements IScanResultHandler, View.OnC
     Button buttonFollow, buttonRescan;
     Uri uri;
     Intent webIntent;
-    //implement restart scan button
 
     public QRFragment() {
     }

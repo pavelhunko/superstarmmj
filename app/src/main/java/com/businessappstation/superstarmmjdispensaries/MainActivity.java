@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import static android.view.View.GONE;
+
 
 public class MainActivity extends FragmentActivity {
 
@@ -32,35 +34,24 @@ public class MainActivity extends FragmentActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager);
-        //mSectionsPagerAdapter.set
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        //fi
         mViewPager.setOffscreenPageLimit(3);
-
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
         //Bind tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-
-//        tabs.set
-//        tabs.
         tabs.setViewPager(mViewPager);
 
 
     }
 
 
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.CustomTabProvider {
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.CustomTabProvider{
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        final int[] ICONS_GRAY = new int[]{
+        final int[] ICONS_GREY = new int[]{
                 R.drawable.home_icon_grey,
                 R.drawable.location_icon_grey,
                 R.drawable.products_icon_grey,
@@ -78,6 +69,10 @@ public class MainActivity extends FragmentActivity {
                 R.string.products_tab,
                 R.string.qr_tab,
         };
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
         @Override
         public Fragment getItem(int position) {
@@ -112,7 +107,7 @@ public class MainActivity extends FragmentActivity {
         //page titles
         @Override
         public CharSequence getPageTitle(int position) {
-           return getString(TAB_TITLE[position]);
+            return getString(TAB_TITLE[position]);
         }
 
 
@@ -121,22 +116,34 @@ public class MainActivity extends FragmentActivity {
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
             View view = inflater.inflate(R.layout.custom_tab_view, viewGroup, false);
 
-            ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
-            imageView.setImageDrawable(getDrawable(ICONS_GRAY[i]));
+            ((ImageView) view.findViewById(R.id.tab_green_icon)).setImageDrawable(getDrawable(ICONS_GREEN[i]));
+            ((ImageView) view.findViewById(R.id.tab_grey_icon)).setImageDrawable(getDrawable(ICONS_GREY[i]));
 
             TextView textView = (TextView) view.findViewById(R.id.tab_name);
             textView.setText(getPageTitle(i));
-            view.setPadding(0,0,0,20);
             return view;
         }
 
         @Override
         public void tabSelected(View view) {
 
+            ((TextView) view.findViewById(R.id.tab_name)).setTextColor(getResources().getColor(R.color.icons_green));
+            ImageView greyImageView = (ImageView) view.findViewById(R.id.tab_grey_icon);
+            greyImageView.setVisibility(GONE);
+            ImageView greenImageView = (ImageView) view.findViewById(R.id.tab_green_icon);
+            greenImageView.setVisibility(View.VISIBLE);
+
+
         }
 
         @Override
         public void tabUnselected(View view) {
+
+            ((TextView) view.findViewById(R.id.tab_name)).setTextColor(getResources().getColor(R.color.icons_gray));
+            ImageView greyImageView = (ImageView) view.findViewById(R.id.tab_grey_icon);
+            greyImageView.setVisibility(View.VISIBLE);
+            ImageView greenImageView = (ImageView) view.findViewById(R.id.tab_green_icon);
+            greenImageView.setVisibility(View.GONE);
 
         }
     }

@@ -63,7 +63,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private static String KEY_CITY = "city";
     private static String KEY_ZIPCODE = "zipcode";
 
-    //private static GoogleMap googleMap; // Might be null if Google Play services APK is not available.
     private static String MAP_FRAGMENT = "MapFragment";
     private static GoogleApiClient mGoogleAPIClient;
     private static String TAG = "maps-fragment";
@@ -132,19 +131,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     public void onMapReady(final GoogleMap gMap) {
         Log.i(TAG, "onMapReady() entered");
 
-//        googleMap = gMap;
-
         gMap.setMyLocationEnabled(true);
         gMap.setOnMarkerClickListener(this);
         gMap.setOnInfoWindowClickListener(this);
 
-//        gMap.setOnCameraChangeListener(getCameraChangeListener());
 
         if (mLocation != null) {
             myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
         } else {
-            //if my location is not defined yet - use NY as default location
             gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(nyLocation, DEFAULT_ZOOM));
         }
 
@@ -168,17 +163,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         });
 
 
-
     }
-
-    /*public GoogleMap.OnCameraChangeListener getCameraChangeListener() {
-        return new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                placeDispensariesOnMap(mDispensariesList);
-            }
-        };
-    }*/
 
     private void buildGoogleAPIClient() {
         Log.i(TAG, "buildGoogleAPIClient entered");
@@ -295,16 +280,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
 
-//    @Override
-//    public boolean onMyLocationButtonClick() {
-//        Log.i(TAG, "onMyLocationButtonClick() is processed");
-//        if (mLocation != null) {
-//            myLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-//            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, DEFAULT_ZOOM));
-//        }
-//        return false;
-//    }
-
     //class for handling dialog events
     public static class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
@@ -338,7 +313,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
 
                     if (!action.equals(Uri.EMPTY) && !action.equals(Uri.parse("NA"))) {
-                        action = Uri.parse("http://"+ action);
+                        action = Uri.parse("http://" + action);
                         intent.setAction(Intent.ACTION_VIEW);
 
                     } else actionDesc = "Website";
@@ -362,7 +337,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                     if (!action.equals(Uri.EMPTY) && !action.equals(Uri.parse("NA"))) {
                         action = Uri.parse("tel:" + action);
                         intent.setAction(Intent.ACTION_DIAL);
-                        //intent.setData(action);
+
                     } else actionDesc = "Phone";
                     break;
 
@@ -450,7 +425,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            //implement progressbar drawer
+
         }
     }
 
